@@ -1,0 +1,60 @@
+# 感知机
+## 1.工作原理：
+给定一个权重和偏置，将输入的变量进行线性运算后判断是否大于0
+## 2.三个门：与门、与非门和或门(均用0和1实现，只改变偏置与权重)
+1.与门：两个输入均为1，则输出1
+```python
+def AND(x1,x2):
+    x = np.array([x1,x2])
+    w = np.array([0.5,0.5])
+    b = -0.7
+    tmp = np.sum(x*w) + b
+    if tmp >= 0:
+        return 1
+    else:
+        return 0
+```
+2.或门：其中之一输入1，则输出1
+```python
+def OR(x1,x2):
+    x = np.array([x1,x2])
+    w = np.array([0.5,0.5])
+    b = -0.2
+    tmp = np.sum(x*w) + b
+    if tmp >= 0:
+        return 1
+    else:
+        return 0
+```
+3.与非门：两个输入均为1，则输出0
+```python
+def NAND(x1,x2):
+    x = np.array([x1,x2])
+    w = np.array([-0.5，-0.5])
+    b = 0.7
+    tmp = np.sum(x*w) + b
+    if tmp >= 0:
+        return 1
+    else:
+        return 0
+```
+## 3.局限性：异或门无法实现
+解决方法：1.利用非线性方法,具体而言是利用多层感知机
+## 4.多层感知机：将三个门组合起来
+异或门的实现，第一层：OR + NAND 第二层：AND
+```
+输入层          隐藏层         输出层
+                                  
+   x₁ ──────┬────────► [NAND] ─s₁──┐
+            │                      │
+            │                      ├──► [AND] ──► y
+            │                      │
+   x₂ ──────┴────────► [ OR ] ─s₂──┘
+```
+```python
+def XOR(x1,x2):
+    y = AND(x1,x2)
+    s1 = OR(x1,x2)
+    s2 = NAND(x1,x2)
+    return y
+```
